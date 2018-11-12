@@ -25,7 +25,7 @@ public class MovieDetailsController {
 
     @GetMapping("/")
     public Collection<MovieDetailsDTO> getAllMovieDetails() {
-        val all = movieDetailsService.getAllMovieDetails();
+        val all = movieDetailsService.getAllMovieDetails(); 
 
         return all.stream()
                 .map(movieMapper::map)
