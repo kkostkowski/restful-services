@@ -1,18 +1,18 @@
 package pl.algorit.restfulservices.services.movies.details;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.Value;
-import lombok.experimental.Wither;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
 @EqualsAndHashCode(of = {"title", "description"})
-@Wither
 @Builder
-public class Movie {
+@NoArgsConstructor
+@AllArgsConstructor
+public class MovieDetailsDTO {
     Integer id;
-    @NonNull
     String title;
     String description;
 }
