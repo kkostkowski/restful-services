@@ -5,12 +5,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.Wither;
+import pl.algorit.restfulservices.repository.CRUDEntity;
 
 @Value
 @EqualsAndHashCode(of = {"title", "description"})
-@Wither
 @Builder
-public class Movie {
+@Wither
+public class Movie implements CRUDEntity {
     Integer id;
     @NonNull
     String title;
