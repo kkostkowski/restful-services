@@ -1,0 +1,22 @@
+type MovieDetailsDTO {
+    id: Int
+    title: String
+    description: String
+}
+
+type CommentDTO {
+    id: Int
+    movieId: Int
+    username: String
+    message: String
+}
+
+type DetailsAndCommentsDTO {
+  movieDetails: MovieDetailsDTO!
+  movieComments: [CommentDTO]
+}
+
+type Query {
+    getMovieDetailsAndComments(movieId:Int!): DetailsAndCommentsDTO!
+    simpleQuery: Int!
+}
