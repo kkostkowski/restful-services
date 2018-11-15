@@ -18,5 +18,4 @@ type DetailsAndCommentsDTO {
 
 type Query {
     getMovieDetailsAndComments(movieId:Int!): DetailsAndCommentsDTO!
-    simpleQuery: Int!
 }

@@ -2,50 +2,32 @@ package pl.algorit.restfulservices.services.movies.detailsandcomments;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.google.common.collect.ImmutableList;
+import lombok.AllArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Component;
 import pl.algorit.restfulservices.services.movies.comments.CommentDTO;
+import pl.algorit.restfulservices.services.movies.comments.CommentMapper;
+import pl.algorit.restfulservices.services.movies.comments.CommentsService;
 import pl.algorit.restfulservices.services.movies.details.MovieDetailsDTO;
+import pl.algorit.restfulservices.services.movies.details.MovieDetailsService;
+import pl.algorit.restfulservices.services.movies.details.MovieMapper;
 
-import java.util.Random;
-
-@Component
+@AllArgsConstructor
 public class DetailsAndCommentsQuery implements GraphQLQueryResolver {
 
-    public Integer simpleQuery() {
-        return new Random().nextInt();
-    }
+    private MovieDetailsService movieDetailsService;
+    private MovieMapper movieMapper;
+
+    private CommentsService commentsService;
+    private CommentMapper commentMapper;
 
     public DetailsAndCommentsDTO getMovieDetailsAndComments(int movieId) {
+        val movie = movieDetailsService.getMovieDetails(movieId);
+        val comments = commentsService.getComments(movieId);
+
         return DetailsAndCommentsDTO.builder()
-                .movieDetails(MovieDetailsDTO.builder()
-                        .id(3)
-                        .description("descri")
-                        .title("titi")
-                        .build())
-                .movieComments(ImmutableList.of(
-                        CommentDTO.builder()
-                                .id(44)
-                                .movieId(3)
-                                .message("guma")
-                                .username("balonowy")
-                                .build(),
-                        CommentDTO.builder()
-                                .id(45)
-                                .movieId(3)
-                                .message("guma2")
-                                .username("balonowy2")
-                                .build())
-                )
+                .movieDetails(movieMapper.map(movie))
+                .movieComments(commentMapper.map(comments))
                 .build();
     }
-
-    public Iterable<DetailsAndCommentsDTO> findAllMovieDetailsWithComments() {
-        return ImmutableList.of(
-                DetailsAndCommentsDTO.builder()
-                        .build(),
-                DetailsAndCommentsDTO.builder()
-                        .build()
-        );
-    }
-
 }

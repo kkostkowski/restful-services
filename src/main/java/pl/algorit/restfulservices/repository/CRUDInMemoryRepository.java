@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -18,8 +19,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static pl.algorit.restfulservices.utils.AdditionalCollectors.toSingle;
 
 public class CRUDInMemoryRepository<ENTITY extends CRUDEntity> implements CRUDRepository<ENTITY> {
+    protected List<ENTITY> objects = new ArrayList<>();
     private AtomicInteger latestId;
-    private List<ENTITY> objects = new ArrayList<>();
 
     public CRUDInMemoryRepository(Set<ObjectCreator<ENTITY>> objectCreators) {
         objects.addAll(objectCreators
@@ -51,11 +52,13 @@ public class CRUDInMemoryRepository<ENTITY extends CRUDEntity> implements CRUDRe
     }
 
     @Override
-    public ENTITY getById(@NonNull int id) {
-        checkArgument(objects.stream().anyMatch(m -> m.getId().equals(id)), "object with such id does not exists");
-        return objects.stream()
+    public Optional<ENTITY> getById(int id) {
+        if (objects.stream().noneMatch(m -> m.getId().equals(id)))
+            return Optional.empty();
+
+        return Optional.of(objects.stream()
                 .filter(object -> object.getId() == id)
-                .collect(toSingle());
+                .collect(toSingle()));
     }
 
     @Override
@@ -67,7 +70,7 @@ public class CRUDInMemoryRepository<ENTITY extends CRUDEntity> implements CRUDRe
     }
 
     @Override
-    public void deleteById(@NonNull int id) {
+    public void deleteById(int id) {
         checkArgument(objects.stream().anyMatch(m -> m.getId().equals(id)), "object with such id does not exists");
         objects.removeIf(object -> object.getId().equals(id));
     }

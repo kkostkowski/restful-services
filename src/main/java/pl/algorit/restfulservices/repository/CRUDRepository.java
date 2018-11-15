@@ -1,12 +1,13 @@
 package pl.algorit.restfulservices.repository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface CRUDRepository<OBJECT extends CRUDEntity> {
 
     OBJECT create(OBJECT movie);
 
-    OBJECT getById(int id);
+    Optional<OBJECT> getById(int id);
 
     void update(OBJECT movie);
 

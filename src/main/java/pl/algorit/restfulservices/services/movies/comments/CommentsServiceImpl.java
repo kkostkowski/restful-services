@@ -14,7 +14,8 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     public Comment getComment(int id) {
-        return commentRepository.getById(id);
+        return commentRepository.getById(id)
+                .orElseThrow(() -> new CommentNotFound(id));
     }
 
     @Override
@@ -25,5 +26,10 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     public Comment createComment(@NonNull Comment movie) {
         return commentRepository.create(movie);
+    }
+
+    @Override
+    public Collection<Comment> getComments(int movieId) {
+        return commentRepository.getByMovieId(movieId);
     }
 }

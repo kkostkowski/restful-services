@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @AllArgsConstructor
@@ -87,7 +88,7 @@ public abstract class CRUDInMemoryRepositoryTest<ENTITY extends CRUDEntity, REPO
         val twoObject = getTestObjectTwoWithId();
         objectUnderTest = repositoryWithObjects(ImmutableSet.of(oneObject, twoObject));
 
-        val result = objectUnderTest.getById(1);
+        val result = objectUnderTest.getById(1).orElseThrow(RuntimeException::new);
 
         @Cleanup
         val softly = new AutoCloseableSoftAssertions();
@@ -96,14 +97,13 @@ public abstract class CRUDInMemoryRepositoryTest<ENTITY extends CRUDEntity, REPO
         softly.assertThat(objectUnderTest.getLatestId().get()).isEqualTo(2);
     }
 
-    public void getById_objectNotExistingWithinObjects_throwsException() {
+    public void getById_objectNotExistingWithinObjects_returnsEmptyOptional() {
         val oneObject = getTestObjectOneWithId();
         val twoObject = getTestObjectTwoWithId();
         objectUnderTest = repositoryWithObjects(ImmutableSet.of(oneObject, twoObject));
 
-        assertThatThrownBy(() -> objectUnderTest.getById(3))
-                .isExactlyInstanceOf(IllegalArgumentException.class)
-                .hasMessage("object with such id does not exists");
+        val result = objectUnderTest.getById(3);
+        assertThat(result).isEmpty();
     }
 
     public void update_objectWithId2_updatesObjectsCollection() {

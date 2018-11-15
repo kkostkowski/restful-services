@@ -1,12 +1,18 @@
 package pl.algorit.restfulservices;
 
 import com.google.common.collect.ImmutableSet;
+import graphql.servlet.GraphQLErrorHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.algorit.restfulservices.services.movies.comments.Comment;
 import pl.algorit.restfulservices.services.movies.comments.CommentCreator;
+import pl.algorit.restfulservices.services.movies.comments.CommentMapper;
+import pl.algorit.restfulservices.services.movies.comments.CommentsService;
 import pl.algorit.restfulservices.services.movies.details.Movie;
 import pl.algorit.restfulservices.services.movies.details.MovieCreator;
+import pl.algorit.restfulservices.services.movies.details.MovieDetailsService;
+import pl.algorit.restfulservices.services.movies.details.MovieMapper;
+import pl.algorit.restfulservices.services.movies.detailsandcomments.DetailsAndCommentsQuery;
 
 import java.util.Collection;
 
@@ -34,4 +40,22 @@ public class RestfulServicesApplicationConfiguration {
     public CommentCreator firstAndOnlyCommentCreator() {
         return () -> comments;
     }
+
+    @Bean
+    public GraphQLErrorHandler errorHandler() {
+        return new pl.algorit.restfulservices.graphqlutils.GraphQLErrorHandler();
+    }
+
+    @Bean
+    public DetailsAndCommentsQuery detailsAndCommentsQuery(MovieDetailsService movieDetailsService,
+                                                           MovieMapper movieMapper,
+                                                           CommentsService commentsService,
+                                                           CommentMapper commentMapper) {
+        return new DetailsAndCommentsQuery(movieDetailsService,
+                movieMapper,
+                commentsService,
+                commentMapper);
+    }
+
+
 }

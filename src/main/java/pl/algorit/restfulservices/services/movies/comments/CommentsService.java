@@ -9,4 +9,5 @@ public interface CommentsService {
 
     Comment createComment(Comment movie);
 
+    Collection<Comment> getComments(int movieId);
 }

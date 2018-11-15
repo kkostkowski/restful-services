@@ -9,6 +9,8 @@ import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.Optional;
+
 import static org.mockito.Mockito.when;
 
 @Test(groups = "unit")
@@ -32,7 +34,7 @@ public class CommentServiceTest {
                 .message("hello")
                 .build();
 
-        when(commentRepositoryFake.getById(2)).thenReturn(existing);
+        when(commentRepositoryFake.getById(2)).thenReturn(Optional.of(existing));
 
         val result = objectUnderTest.getComment(id);
 

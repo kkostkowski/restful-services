@@ -9,6 +9,8 @@ import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.Optional;
+
 import static org.mockito.Mockito.when;
 
 @Test(groups = "unit")
@@ -31,7 +33,7 @@ public class MovieDetailsServiceTest {
                 .description("tests")
                 .build();
 
-        when(movieRepositoryFake.getById(2)).thenReturn(existingMovie);
+        when(movieRepositoryFake.getById(2)).thenReturn(Optional.of(existingMovie));
 
         val result = objectUnderTest.getMovieDetails(movieId);
 

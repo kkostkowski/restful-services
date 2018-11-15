@@ -14,7 +14,8 @@ public class MovieDetailsServiceImpl implements MovieDetailsService {
 
     @Override
     public Movie getMovieDetails(int movieId) {
-        return movieRepository.getById(movieId);
+        return movieRepository.getById(movieId)
+                .orElseThrow(() -> new MovieNotFound(movieId));
     }
 
     @Override

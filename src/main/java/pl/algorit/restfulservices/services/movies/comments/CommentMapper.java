@@ -2,6 +2,9 @@ package pl.algorit.restfulservices.services.movies.comments;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 @Component
 public class CommentMapper {
     public Comment map(CommentDTO commentDTO) {
@@ -20,5 +23,16 @@ public class CommentMapper {
                 .username(comment.getUsername())
                 .message(comment.getMessage())
                 .build();
+    }
+
+    public Collection<CommentDTO> map(Collection<Comment> comments) {
+        return comments.stream()
+                .map(comment -> CommentDTO.builder()
+                        .movieId(comment.getMovieId())
+                        .id(comment.getId())
+                        .username(comment.getUsername())
+                        .message(comment.getMessage())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
