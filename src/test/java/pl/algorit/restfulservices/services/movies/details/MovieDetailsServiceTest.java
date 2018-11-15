@@ -44,7 +44,7 @@ public class MovieDetailsServiceTest {
         Assertions.assertThat(result).isEqualTo(expectedMovie);
     }
 
-    public void getAllMovieDetails_oneMovie_returnsOneMovie() {
+    public void getAllMovieDetails_oneMovieExists_returnsOneMovie() {
         val existingMovie = Movie.builder()
                 .id(2)
                 .title("second title")

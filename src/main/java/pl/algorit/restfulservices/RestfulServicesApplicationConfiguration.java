@@ -3,6 +3,8 @@ package pl.algorit.restfulservices;
 import com.google.common.collect.ImmutableSet;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import pl.algorit.restfulservices.services.movies.comments.Comment;
+import pl.algorit.restfulservices.services.movies.comments.CommentCreator;
 import pl.algorit.restfulservices.services.movies.details.Movie;
 import pl.algorit.restfulservices.services.movies.details.MovieCreator;
 
@@ -17,8 +19,19 @@ public class RestfulServicesApplicationConfiguration {
             .add(Movie.builder().id(3).title("Third").description("ThirdDescription").build())
             .build();
 
+    private Collection<Comment> comments = ImmutableSet.<Comment>builder()
+            .add(Comment.builder().id(1).movieId(1).username("usr1").message("hello moto1").build())
+            .add(Comment.builder().id(2).movieId(1).username("usr2").message("hello moto2").build())
+            .add(Comment.builder().id(3).movieId(1).username("usr3").message("hello moto3").build())
+            .build();
+
     @Bean
-    public MovieCreator testMoviesCreator() {
+    public MovieCreator firstAndOnlyMovieCreator() {
         return () -> testMovies;
+    }
+
+    @Bean
+    public CommentCreator firstAndOnlyCommentCreator() {
+        return () -> comments;
     }
 }

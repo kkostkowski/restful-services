@@ -1,4 +1,4 @@
-package pl.algorit.restfulservices.services.movies.details;
+package pl.algorit.restfulservices.services.movies.comments;
 
 import org.springframework.stereotype.Repository;
 import pl.algorit.restfulservices.repository.CRUDInMemoryRepository;
@@ -6,10 +6,9 @@ import pl.algorit.restfulservices.repository.CRUDInMemoryRepository;
 import java.util.Set;
 
 @Repository
-public class MovieRepositoryInMemory extends CRUDInMemoryRepository<Movie> implements MovieRepository {
-
+public class CommentRepositoryInMemory extends CRUDInMemoryRepository<Comment> implements CommentRepository {
     @SuppressWarnings("unchecked")
-    public MovieRepositoryInMemory(Set<MovieCreator> objectCreators) {
+    public CommentRepositoryInMemory(Set<CommentCreator> objectCreators) {
         super((Set) objectCreators);
     }
 

@@ -16,8 +16,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @AllArgsConstructor
 @Test(groups = {"unit"})
-public abstract class CRUDInMemoryRepositoryTest<K extends CRUDEntity, T extends CRUDInMemoryRepository<K>> {
-    private CRUDInMemoryRepository<K> objectUnderTest;
+public abstract class CRUDInMemoryRepositoryTest<ENTITY extends CRUDEntity, REPOSITORY extends CRUDInMemoryRepository<ENTITY>, CREATOR extends ObjectCreator<ENTITY>> {
+    private CRUDInMemoryRepository<ENTITY> objectUnderTest;
 
     public void __constructor_usesObjectCreator_toInitializeInMemoryDataAndIncreaseObjectsCounter() {
         val oneObject = getTestObjectOneWithId();
@@ -32,8 +32,8 @@ public abstract class CRUDInMemoryRepositoryTest<K extends CRUDEntity, T extends
     }
 
     public void __constructor_usingObjectCreator_doesNotAllowToCreateObjectsWithoutId() {
-        K oneObject = getTestObjectWithoutId();
-        val objectCreators = ImmutableSet.<ObjectCreator<K>>of(() -> Collections.singleton(oneObject));
+        ENTITY oneObject = getTestObjectWithoutId();
+        val objectCreators = ImmutableSet.of(getCreator(Collections.singleton(oneObject)));
         assertThatThrownBy(() -> objectUnderTest = repositoryWithCreators(objectCreators))
                 .isExactlyInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Creator must creates objects with id");
@@ -42,9 +42,9 @@ public abstract class CRUDInMemoryRepositoryTest<K extends CRUDEntity, T extends
     public void __constructor_usingObjectCreator_doesNotAllowToCreateObjectsWithTheSameIds() {
         val oneObject = getTestObjectOneWithId();
         val oneObjectPrim = getTestObjectOneWithId();
-        val objectCreators = ImmutableSet.<ObjectCreator<K>>of(
-                () -> Collections.singleton(oneObject),
-                () -> Collections.singleton(oneObjectPrim));
+        val objectCreators = ImmutableSet.of(
+                getCreator(Collections.singleton(oneObject)),
+                getCreator(Collections.singleton(oneObjectPrim)));
 
         assertThatThrownBy(() -> objectUnderTest = repositoryWithCreators(objectCreators))
                 .isExactlyInstanceOf(IllegalArgumentException.class)
@@ -169,19 +169,21 @@ public abstract class CRUDInMemoryRepositoryTest<K extends CRUDEntity, T extends
                 .hasMessage("object with such id does not exists");
     }
 
-    protected abstract T emptyRepository();
+    protected abstract REPOSITORY emptyRepository();
 
-    protected abstract T repositoryWithObjects(Set<K> objects);
+    protected abstract REPOSITORY repositoryWithObjects(Set<ENTITY> objects);
 
-    protected abstract T repositoryWithCreators(Set<ObjectCreator<K>> objectCreators);
+    protected abstract REPOSITORY repositoryWithCreators(Set<CREATOR> objectCreators);
 
-    protected abstract K getTestObjectWithoutId();
+    protected abstract CREATOR getCreator(Set<ENTITY> objects);
 
-    protected abstract K getTestObjectOneWithId();
+    protected abstract ENTITY getTestObjectWithoutId();
 
-    protected abstract K getTestObjectTwoWithId();
+    protected abstract ENTITY getTestObjectOneWithId();
 
-    protected abstract K getTestObjectTwoPrimWithId();
+    protected abstract ENTITY getTestObjectTwoWithId();
 
-    protected abstract K getTestObjectThreeWithId();
+    protected abstract ENTITY getTestObjectTwoPrimWithId();
+
+    protected abstract ENTITY getTestObjectThreeWithId();
 }
