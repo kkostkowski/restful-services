@@ -7,11 +7,13 @@ import lombok.Value;
 import lombok.experimental.Wither;
 import pl.algorit.restfulservices.repository.CRUDEntity;
 
+import java.io.Serializable;
+
 @Value
 @EqualsAndHashCode(of = {"title", "description"})
 @Builder
 @Wither
-public class Movie implements CRUDEntity {
+public class Movie implements CRUDEntity, Serializable {
     Integer id;
     @NonNull
     String title;
